@@ -1,4 +1,4 @@
-name: Cep Bağlama APK
+name: Android APK'ları
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Android APK Oluştur
+    name: Cep Bağlama APK Oluştur
     runs-on: ubuntu-latest
 
     permissions:
@@ -32,106 +32,227 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
-      - name: Android ZIP dosyasını bul
+      - name: Android projesini oluştur
         shell: bash
         run: |
-          set -e
 
-          echo "ZIP dosyaları aranıyor..."
+          mkdir -p android-project/app/src/main/java/com/cepbaglama/pro
+          mkdir -p android-project/app/src/main/res/values
 
-          FOUND=""
+          cat > android-project/settings.gradle.kts <<'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
 
-          for ZIP in ./*.zip; do
-            if [ ! -f "$ZIP" ]; then
-              continue
-            fi
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
-            echo "Kontrol ediliyor: $ZIP"
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
 
-            if unzip -l "$ZIP" | grep -q "settings.gradle.kts"; then
-              if unzip -l "$ZIP" | grep -q "app/build.gradle.kts"; then
-                FOUND="$ZIP"
-                break
-              fi
-            fi
-          done
+          rootProject.name = "CepBaglamaPro"
+          include(":app")
+          EOF
 
-          if [ -z "$FOUND" ]; then
-            echo "Android proje ZIP'i bulunamadı!"
-            echo "Depodaki dosyalar:"
-            ls -lah
-            echo "ZIP dosyaları:"
-            find . -maxdepth 1 -type f -iname "*.zip"
-            exit 1
-          fi
+          cat > android-project/build.gradle.kts <<'EOF'
+          plugins {
+              id("com.android.application") version "8.7.3" apply false
+          }
+          EOF
 
-          echo "Android proje ZIP'i bulundu:"
-          echo "$FOUND"
+          cat > android-project/gradle.properties <<'EOF'
+          org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+          android.useAndroidX=true
+          android.nonTransitiveRClass=true
+          EOF
 
-          rm -rf extracted android-project
-          mkdir -p extracted
-          mkdir -p android-project
+          cat > android-project/app/build.gradle.kts <<'EOF'
+          plugins {
+              id("com.android.application")
+          }
 
-          unzip -q "$FOUND" -d extracted
+          android {
+              namespace = "com.cepbaglama.pro"
+              compileSdk = 35
 
-          echo "Android proje klasörü aranıyor..."
+              defaultConfig {
+                  applicationId = "com.cepbaglama.pro"
+                  minSdk = 23
+                  targetSdk = 35
+                  versionCode = 1
+                  versionName = "1.0"
+              }
 
-          PROJECT_DIR=$(find extracted -type f -name "settings.gradle.kts" -print -quit | xargs dirname)
+              buildTypes {
+                  release {
+                      isMinifyEnabled = false
+                  }
+              }
+          }
 
-          if [ -z "$PROJECT_DIR" ]; then
-            echo "settings.gradle.kts bulunamadı!"
-            exit 1
-          fi
+          dependencies {
+              implementation("androidx.appcompat:appcompat:1.7.0")
+              implementation("androidx.webkit:webkit:1.12.1")
+          }
+          EOF
 
-          echo "Android proje klasörü:"
-          echo "$PROJECT_DIR"
+          cat > android-project/app/src/main/res/values/strings.xml <<'EOF'
+          <resources>
+              <string name="app_name">Cep Bağlama</string>
+          </resources>
+          EOF
 
-          cp -a "$PROJECT_DIR"/. android-project/
+          cat > android-project/app/src/main/res/values/colors.xml <<'EOF'
+          <resources>
+              <color name="black">#000000</color>
+          </resources>
+          EOF
 
-          echo "Android proje içeriği:"
-          find android-project -maxdepth 3 -type f | sort | head -100
+          cat > android-project/app/src/main/res/values/themes.xml <<'EOF'
+          <resources>
+
+              <style name="Theme.CepBaglamaPro"
+                  parent="Theme.AppCompat.DayNight.NoActionBar">
+
+                  <item name="android:fontFamily">sans</item>
+                  <item name="android:windowActionModeOverlay">true</item>
+                  <item name="android:colorAccent">#FF6B00</item>
+
+              </style>
+
+          </resources>
+          EOF
+
+          cat > android-project/app/src/main/AndroidManifest.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+              <uses-permission android:name="android.permission.INTERNET" />
+
+              <application
+                  android:allowBackup="true"
+                  android:label="@string/app_name"
+                  android:theme="@style/Theme.CepBaglamaPro"
+                  android:usesCleartextTraffic="false">
+
+                  <activity
+                      android:name=".MainActivity"
+                      android:screenOrientation="portrait"
+                      android:exported="true">
+
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+
+                  </activity>
+
+              </application>
+
+          </manifest>
+          EOF
+
+          cat > android-project/app/src/main/java/com/cepbaglama/pro/MainActivity.java <<'EOF'
+          package com.cepbaglama.pro;
+
+          import android.annotation.SuppressLint;
+          import android.os.Bundle;
+          import android.webkit.WebChromeClient;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+
+          import androidx.appcompat.app.AppCompatActivity;
+
+          public class MainActivity extends AppCompatActivity {
+
+              private WebView webView;
+
+              @SuppressLint("SetJavaScriptEnabled")
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+
+                  webView = new WebView(this);
+
+                  setContentView(webView);
+
+                  WebSettings settings = webView.getSettings();
+
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setMediaPlaybackRequiresUserGesture(false);
+                  settings.setBuiltInZoomControls(false);
+                  settings.setDisplayZoomControls(false);
+                  settings.setLoadWithOverviewMode(false);
+                  settings.setUseWideViewPort(false);
+
+                  webView.setWebViewClient(new WebViewClient());
+                  webView.setWebChromeClient(new WebChromeClient());
+
+                  webView.loadUrl(
+                      "https://ediptan01-commits.github.io/Cep-baglama/"
+                  );
+              }
+
+              @Override
+              public void onBackPressed() {
+
+                  if (webView.canGoBack()) {
+                      webView.goBack();
+                  } else {
+                      super.onBackPressed();
+                  }
+              }
+          }
+          EOF
+
+          echo "Android projesi başarıyla oluşturuldu."
 
       - name: Android projesini kontrol et
-        working-directory: android-project
         shell: bash
         run: |
-          set -e
 
-          test -f settings.gradle.kts
-          test -f app/build.gradle.kts
-          test -f app/src/main/AndroidManifest.xml
+          test -f android-project/settings.gradle.kts
+          test -f android-project/build.gradle.kts
+          test -f android-project/app/build.gradle.kts
+          test -f android-project/app/src/main/AndroidManifest.xml
+          test -f android-project/app/src/main/java/com/cepbaglama/pro/MainActivity.java
 
-          echo "Android proje dosyaları bulundu."
-          echo "Gradle:"
-          gradle --version
+          echo "Tüm Android proje dosyaları hazır."
 
       - name: APK oluştur
         working-directory: android-project
         shell: bash
         run: |
-          set -e
 
           gradle :app:assembleDebug --no-daemon --stacktrace
 
-      - name: APK dosyasını kontrol et
+      - name: APK kontrol
         shell: bash
         run: |
-          set -e
 
           APK="android-project/app/build/outputs/apk/debug/app-debug.apk"
 
           if [ ! -f "$APK" ]; then
-            echo "APK oluşturulamadı!"
-            find android-project/app/build -type f 2>/dev/null || true
-            exit 1
+              echo "APK oluşturulamadı!"
+              exit 1
           fi
 
-          echo "APK başarıyla oluşturuldu!"
+          echo "APK başarıyla oluşturuldu."
           ls -lh "$APK"
 
       - name: APK'yı yükle
         uses: actions/upload-artifact@v4
         with:
-          name: Cep-Baglama-Pro-APK
+          name: Cep-Baglama-APK
           path: android-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
