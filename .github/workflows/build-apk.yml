@@ -2,18 +2,22 @@ name: Cep Bağlama APK
 
 on:
   workflow_dispatch:
+
   push:
     branches:
       - main
+      - ana
 
 jobs:
   build:
+    name: Android APK Oluştur
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
 
     steps:
+
       - name: GitHub deposunu al
         uses: actions/checkout@v4
 
@@ -29,26 +33,105 @@ jobs:
           gradle-version: '8.10.2'
 
       - name: Android ZIP dosyasını bul
+        shell: bash
         run: |
-          ZIP_FILE=$(find . -maxdepth 1 -type f -iname '*Cep-Baglama-Pro-Android*.zip' | head -n 1)
+          set -e
 
-          if [ -z "$ZIP_FILE" ]; then
-            echo "Android ZIP bulunamadı!"
+          echo "ZIP dosyaları aranıyor..."
+
+          FOUND=""
+
+          for ZIP in ./*.zip; do
+            if [ ! -f "$ZIP" ]; then
+              continue
+            fi
+
+            echo "Kontrol ediliyor: $ZIP"
+
+            if unzip -l "$ZIP" | grep -q "settings.gradle.kts"; then
+              if unzip -l "$ZIP" | grep -q "app/build.gradle.kts"; then
+                FOUND="$ZIP"
+                break
+              fi
+            fi
+          done
+
+          if [ -z "$FOUND" ]; then
+            echo "Android proje ZIP'i bulunamadı!"
+            echo "Depodaki dosyalar:"
+            ls -lah
+            echo "ZIP dosyaları:"
+            find . -maxdepth 1 -type f -iname "*.zip"
             exit 1
           fi
 
-          echo "Bulundu: $ZIP_FILE"
+          echo "Android proje ZIP'i bulundu:"
+          echo "$FOUND"
 
+          rm -rf extracted android-project
+          mkdir -p extracted
           mkdir -p android-project
-          unzip -q "$ZIP_FILE" -d android-project
+
+          unzip -q "$FOUND" -d extracted
+
+          echo "Android proje klasörü aranıyor..."
+
+          PROJECT_DIR=$(find extracted -type f -name "settings.gradle.kts" -print -quit | xargs dirname)
+
+          if [ -z "$PROJECT_DIR" ]; then
+            echo "settings.gradle.kts bulunamadı!"
+            exit 1
+          fi
+
+          echo "Android proje klasörü:"
+          echo "$PROJECT_DIR"
+
+          cp -a "$PROJECT_DIR"/. android-project/
+
+          echo "Android proje içeriği:"
+          find android-project -maxdepth 3 -type f | sort | head -100
+
+      - name: Android projesini kontrol et
+        working-directory: android-project
+        shell: bash
+        run: |
+          set -e
+
+          test -f settings.gradle.kts
+          test -f app/build.gradle.kts
+          test -f app/src/main/AndroidManifest.xml
+
+          echo "Android proje dosyaları bulundu."
+          echo "Gradle:"
+          gradle --version
 
       - name: APK oluştur
         working-directory: android-project
+        shell: bash
         run: |
-          gradle :app:assembleDebug --no-daemon
+          set -e
+
+          gradle :app:assembleDebug --no-daemon --stacktrace
+
+      - name: APK dosyasını kontrol et
+        shell: bash
+        run: |
+          set -e
+
+          APK="android-project/app/build/outputs/apk/debug/app-debug.apk"
+
+          if [ ! -f "$APK" ]; then
+            echo "APK oluşturulamadı!"
+            find android-project/app/build -type f 2>/dev/null || true
+            exit 1
+          fi
+
+          echo "APK başarıyla oluşturuldu!"
+          ls -lh "$APK"
 
       - name: APK'yı yükle
         uses: actions/upload-artifact@v4
         with:
           name: Cep-Baglama-Pro-APK
           path: android-project/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
