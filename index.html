@@ -1,707 +1,195 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Cep Bağlama</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0a0a0b">
+<title>Cep Bağlama Pro</title>
 <style>
+:root{--bg:#09090a;--panel:#151517;--panel2:#1d1d20;--gold:#e7a84d;--gold2:#ffcc72;--text:#f7f7f7;--muted:#aaa;--line:#3a3a3f;--danger:#ef5350}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{
-margin:0;
-background:#0d0d0d;
-color:#fff;
-font-family:Arial,sans-serif;
-overflow-x:hidden;
-touch-action:manipulation;
-}
-
-
-
-header{
-height:68px;padding:9px 16px;
-display:flex;align-items:center;justify-content:space-between;
-background:linear-gradient(135deg,#241207,#704018);
-border-bottom:1px solid #a96629
-}
-
-.logo{font-size:23px;font-weight:bold}
-.subtitle{color:#d8b48a;font-size:11px;margin-top:3px}
-
-button,select{
-border:0;border-radius:12px;
-background:#743f16;color:white;
-padding:10px 13px;font-size:14px
-}
-
-button:active{transform:scale(.95)}
-
-.controls{
-display:flex;gap:8px;padding:9px;
-background:#181818;overflow-x:auto
-}
-
-.control{
-min-width:115px;padding:8px;
-background:#242424;border:1px solid #3b3b3b;
-border-radius:12px
-}
-
-.control-title{color:#aaa;font-size:11px;margin-bottom:5px}
-
-select{width:100%;background:#363636;padding:7px}
-input[type=range]{width:100%}
-
-.instrument{
-position:relative;width:96%;max-width:1150px;height:510px;
-margin:18px auto;overflow:hidden;border-radius:90px;
-background:
-radial-gradient(circle at 78% 50%,#080706 0 5%,#d48b3c 6% 10%,transparent 11%),
-linear-gradient(90deg,#3b1c09,#7e4218,#ae6729,#713813,#351806);
-box-shadow:0 18px 40px #000,inset 0 0 45px #251003
-}
-
-.neck{
-position:absolute;left:2%;top:16%;width:73%;height:68%;
-border-radius:25px 80px 80px 25px;
-background:linear-gradient(#a3612d,#603316,#955325);
-box-shadow:inset 0 0 20px #251004
-}
-
-.body{
-position:absolute;right:4%;top:7%;width:35%;height:86%;
-border-radius:50%;
-background:
-radial-gradient(circle at center,#090806 0 9%,#d68c3d 10% 16%,#914a1b 17% 100%);
-box-shadow:inset 0 0 40px #2b1305,0 10px 25px #000
-}
-
-.frets{
-position:absolute;left:6%;top:16%;width:67%;height:68%;
-z-index:8;display:flex
-}
-
-.fret{
-position:relative;height:100%;flex:1;
-border-right:3px solid rgba(242,211,174,.7)
-}
-
-.fret:first-child{border-left:4px solid #e3ad70}
-
-.fret.active{
-background:rgba(255,190,80,.22);
-box-shadow:inset 0 0 18px rgba(255,190,80,.5)
-}
-
-.fret-number{
-position:absolute;bottom:3px;width:100%;
-text-align:center;font-size:9px;color:#ddd;
-opacity:.75;pointer-events:none
-}
-
-.strings{
-position:absolute;left:4%;top:17%;width:91%;height:66%;
-z-index:12;display:flex;flex-direction:column;
-justify-content:space-between;pointer-events:none
-}
-
-.string{
-position:relative;height:28px;pointer-events:auto
-}
-
-.string-line{
-position:absolute;left:0;right:0;top:13px;height:2px;
-background:#eee;box-shadow:0 0 5px white;
-transition:.08s
-}
-
-.string.hit .string-line{
-height:6px;background:#fff5c7;
-box-shadow:0 0 18px white
-}
-
-.string-name{
-position:absolute;left:3px;top:-1px;
-font-size:11px;color:white;
-text-shadow:0 2px 3px black
-}
-
-.finger{
-position:absolute;width:34px;height:34px;
-border-radius:50%;background:rgba(255,190,80,.9);
-border:3px solid white;
-box-shadow:0 0 20px #ffb34d;
-z-index:30;transform:translate(-50%,-50%);
-pointer-events:none;display:none
-}
-
-.note-panel{
-width:96%;max-width:1150px;margin:10px auto;padding:14px;
-text-align:center;border-radius:18px;
-background:#1b1b1b;border:1px solid #383838
-}
-
-.note{
-font-size:42px;font-weight:bold;color:#e4a655
-}
-
-.info{color:#aaa;margin-top:5px}
-
-.actions{
-display:flex;justify-content:center;gap:8px;
-flex-wrap:wrap;margin-top:12px
-}
-
-.bottom{
-width:96%;max-width:1150px;margin:10px auto 25px;
-display:flex;justify-content:center;gap:9px;flex-wrap:wrap
-}
-
-.recording{background:#a52323!important}
-
-@media(max-width:700px){
-.instrument{height:430px;border-radius:65px}
-.logo{font-size:20px}
-.note{font-size:38px}
-}
-
-@media(orientation:landscape) and (max-height:600px){
-header{height:52px}
-.instrument{height:calc(100vh - 125px);margin:7px auto}
-}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#292116 0,#0b0b0c 42%,#070708 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden;touch-action:manipulation}
+button,select,input{font:inherit}
+button{border:0;color:#fff;cursor:pointer}
+.app{max-width:760px;margin:auto;padding:14px 12px 34px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 4px 14px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,#ffd27a,#a95d16);display:grid;place-items:center;box-shadow:0 8px 24px #0008;font-size:24px}
+h1{font-size:21px;margin:0;letter-spacing:.2px}
+.sub{font-size:12px;color:#aaa;margin-top:2px}
+.top-actions{display:flex;gap:7px}
+.iconbtn{width:42px;height:42px;border-radius:13px;background:#1a1a1d;border:1px solid #34343a;font-size:19px}
+.hero{background:linear-gradient(180deg,#171719,#101012);border:1px solid #34343a;border-radius:22px;padding:14px;box-shadow:0 18px 50px #0008}
+.hero-title{display:flex;align-items:end;justify-content:space-between;margin-bottom:10px}
+.hero-title b{font-size:15px}.status{font-size:12px;color:var(--gold2)}
+.instrument-wrap{position:relative;overflow:hidden;border-radius:18px;background:#090909;border:1px solid #27272a}
+canvas{display:block;width:100%;height:auto;touch-action:none}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.control{background:#18181b;border:1px solid #303036;border-radius:15px;padding:10px}
+.control label{display:block;color:#999;font-size:11px;margin-bottom:5px}
+select{width:100%;background:#242429;color:#fff;border:1px solid #404047;border-radius:10px;padding:9px;outline:0}
+.range{width:100%;accent-color:var(--gold)}
+.check{display:flex;align-items:center;justify-content:space-between;min-height:38px}
+.switch{position:relative;width:48px;height:27px}.switch input{display:none}.slider{position:absolute;inset:0;border-radius:30px;background:#39393e}.slider:before{content:"";position:absolute;width:21px;height:21px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}.switch input:checked+.slider{background:#a9651d}.switch input:checked+.slider:before{transform:translateX(21px)}
+.note{margin-top:12px;background:linear-gradient(180deg,#1b1b1e,#131315);border:1px solid #35353a;border-radius:20px;padding:15px;text-align:center}
+.note .big{font-size:48px;line-height:1;font-weight:800;color:var(--gold2);text-shadow:0 0 24px #d9913655}
+.note .meta{margin-top:7px;color:#aaa;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.btn{min-height:50px;border-radius:14px;background:linear-gradient(180deg,#9a561d,#703a12);border:1px solid #b56b25;box-shadow:0 7px 16px #0006;font-weight:700;font-size:15px}
+.btn:active{transform:scale(.97);filter:brightness(1.15)}
+.btn.secondary{background:#222226;border-color:#3b3b42}
+.btn.record{background:linear-gradient(180deg,#9e332f,#6d211f);border-color:#c84b46}
+.btn.active{box-shadow:0 0 0 2px #ffca6a55,0 8px 20px #0008}
+.rhythm{margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.transport{display:grid;grid-template-columns:1fr 1fr;margin-top:8px;gap:8px}
+.section{margin-top:14px;background:#121214;border:1px solid #2d2d31;border-radius:18px;padding:13px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}.section-head b{font-size:14px}.section-head span{font-size:11px;color:#777}
+.history{display:flex;gap:6px;overflow:auto;padding-bottom:2px;min-height:32px}
+.chip{flex:0 0 auto;background:#25252a;border:1px solid #3b3b42;border-radius:9px;padding:7px 9px;font-size:12px}
+.tip{color:#8f8f96;font-size:12px;line-height:1.45}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:#f2b65d;color:#17110a;padding:10px 15px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:0 10px 30px #0008}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:430px){.app{padding:10px 9px 28px}.controls{grid-template-columns:1fr 1fr}.btn{font-size:14px}.note .big{font-size:43px}}
 </style>
 </head>
-
 <body>
-
-<header>
-<div>
-<div class="logo">🎸 Cep Bağlama</div>
-<div class="subtitle">Dijital bağlama • 3.1 sürüm</div>
-</div>
-<button id="soundBtn">🔊 Sesi Aç</button>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="logo">🪕</div><div><h1>Cep Bağlama Pro</h1><div class="sub">Dijital bağlama • profesyonel sürüm</div></div></div>
+ <div class="top-actions"><button class="iconbtn" id="fullBtn" title="Tam ekran">⛶</button><button class="iconbtn" id="resetBtn" title="Sıfırla">↻</button></div>
 </header>
 
-<div class="controls">
+<section class="hero">
+ <div class="hero-title"><b>SAZ KONTROL</b><span class="status" id="status">Hazır</span></div>
+ <div class="instrument-wrap"><canvas id="saz" width="720" height="700"></canvas></div>
+ <div class="controls">
+  <div class="control"><label>SAP</label><select id="neck"><option value="short">Kısa Sap • 12 Perde</option><option value="long">Uzun Sap • 19 Perde</option></select></div>
+  <div class="control"><label>DÜZEN</label><select id="tuning"><option value="baglama">Bağlama</option><option value="bozuk">Bozuk</option><option value="kara">Kara Düzen</option></select></div>
+  <div class="control"><label>SES • <span id="volText">80%</span></label><input class="range" id="volume" type="range" min="0" max="100" value="80"></div>
+  <div class="control"><label>TİTREŞİM</label><div class="check"><span>Dokununca titreşim</span><label class="switch"><input id="vibrate" type="checkbox" checked><span class="slider"></span></label></div></div>
+ </div>
+</section>
 
-<div class="control">
-<div class="control-title">Sap</div>
-<select id="sap">
-<option value="kisa">Kısa Sap</option>
-<option value="uzun">Uzun Sap</option>
-</select>
+<section class="note">
+ <div class="big" id="noteName">—</div>
+ <div class="meta" id="noteMeta">Bir tele veya perdeye dokun</div>
+ <div class="grid">
+  <button class="btn" id="down">↓ Aşağı Mızrap</button><button class="btn" id="up">↑ Yukarı Mızrap</button>
+  <button class="btn record" id="record">🔴 Kayıt</button><button class="btn secondary" id="undo">↩ Son Notayı Sil</button>
+ </div>
+ <div class="rhythm">
+  <button class="btn" data-rhythm="slow">🐢 Yavaş</button><button class="btn" data-rhythm="mid">▶ Orta</button><button class="btn" data-rhythm="fast">🔥 Hızlı</button>
+ </div>
+ <div class="transport"><button class="btn secondary" id="stopRhythm">⏹ Ritim Durdur</button><button class="btn secondary" id="playRec">▶ Kaydı Çal</button></div>
+</section>
+
+<section class="section">
+ <div class="section-head"><b>Nota Geçmişi</b><span id="count">0 nota</span></div>
+ <div class="history" id="history"><span class="tip">Henüz nota çalınmadı.</span></div>
+</section>
+
+<section class="section">
+ <div class="section-head"><b>Kullanım</b><span>Pro</span></div>
+ <div class="tip">Tele dokunarak açık tel çal. Perde üzerine dokunarak perde notasını çal. Mızrap yönleri sesi tekrar tetikler. Kayıt, son çaldığın notaları cihazda tutar; “Kaydı Çal” ile dinleyebilirsin.</div>
+</section>
 </div>
-
-<div class="control">
-<div class="control-title">Düzen</div>
-<select id="duzen">
-<option value="baglama">Bağlama Düzeni</option>
-<option value="bozuk">Bozuk Düzen</option>
-<option value="kara">Kara Düzen</option>
-</select>
-</div>
-
-<div class="control">
-<div class="control-title">Ses</div>
-<input id="volume" type="range" min="0" max="100" value="75">
-</div>
-
-<div class="control">
-<div class="control-title">Titreşim</div>
-<button id="vibration">Açık</button>
-</div>
-
-</div>
-
-<div class="instrument" id="instrument">
-
-<div class="neck"></div>
-<div class="body"></div>
-
-<div class="frets" id="frets"></div>
-
-<div class="strings">
-
-<div class="string" data-string="0">
-<div class="string-name">SOL</div>
-<div class="string-line"></div>
-</div>
-
-<div class="string" data-string="1">
-<div class="string-name">SOL</div>
-<div class="string-line"></div>
-</div>
-
-<div class="string" data-string="2">
-<div class="string-name">RE</div>
-<div class="string-line"></div>
-</div>
-
-<div class="string" data-string="3">
-<div class="string-name">RE</div>
-<div class="string-line"></div>
-</div>
-
-<div class="string" data-string="4">
-<div class="string-name">LA</div>
-<div class="string-line"></div>
-</div>
-
-<div class="string" data-string="5">
-<div class="string-name">LA</div>
-<div class="string-line"></div>
-</div>
-
-<div class="string" data-string="6">
-<div class="string-name">Mİ</div>
-<div class="string-line"></div>
-</div>
-
-</div>
-
-<div class="finger" id="finger"></div>
-
-</div>
-
-<div class="note-panel">
-
-<div class="note" id="note">—</div>
-
-<div class="info" id="info">
-Tele veya perdeye dokun.
-</div>
-
-<div class="actions">
-
-<button id="down">↓ Aşağı Mızrap</button>
-<button id="up">↑ Yukarı Mızrap</button>
-<button id="record">🔴 Kayıt</button>
-<button id="undo">↩ Son Notayı Sil</button>
-
-</div>
-
-</div>
-
-<div class="bottom">
-
-<button id="slow">🐢 Yavaş</button>
-<button id="medium">▶ Orta</button>
-<button id="fast">🔥 Hızlı</button>
-<button id="stop">⏹ Ritim Durdur</button>
-
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-
-let audio=null;
-let master=null;
-let volume=.75;
-let vibration=true;
-let tuning="baglama";
-let sap="kisa";
-let lastString=0;
-let lastFret=0;
-let rhythmTimer=null;
-let recording=false;
-let recordStart=0;
-let recordingData=[];
-let history=[];
-
-const tunings={
-baglama:[196,196,146.83,146.83,110,110,73.42],
-bozuk:[196,196,146.83,146.83,110,110,82.41],
-kara:[220,220,164.81,164.81,110,110,82.41]
-};
-
-const noteNames=[
-"DO","DO#","RE","RE#","Mİ","FA",
-"FA#","SOL","SOL#","LA","LA#","Sİ"
+const canvas=document.getElementById('saz'),ctx=canvas.getContext('2d');
+const noteEl=document.getElementById('noteName'),metaEl=document.getElementById('noteMeta'),historyEl=document.getElementById('history');
+const statusEl=document.getElementById('status'),toastEl=document.getElementById('toast');
+let audio=null,master=null,history=[],recording=[],isRecording=false,rhythmTimer=null,current=null;
+let neck='short', tuning='baglama', volume=.8, vibrate=true;
+const strings=[
+ {label:'SOL',midi:55,base:196,group:'SOL'}, {label:'SOL',midi:55,base:196,group:'SOL'},
+ {label:'RE',midi:50,base:146.83,group:'RE'}, {label:'RE',midi:50,base:146.83,group:'RE'},
+ {label:'LA',midi:45,base:110,group:'LA'}, {label:'LA',midi:45,base:110,group:'LA'},
+ {label:'Mİ',midi:40,base:82.41,group:'Mİ'}
 ];
-
-function initAudio(){
-
-if(!audio){
-
-audio=new(window.AudioContext||window.webkitAudioContext)();
-
-master=audio.createGain();
-master.gain.value=volume;
-master.connect(audio.destination);
-
+const tuningMul={baglama:[1,1,1,1,1,1,1],bozuk:[1,1,1,1,1,1,0.5],kara:[1,1,2,2,1,1,1]};
+const fretNames=['DO','DO#','RE','RE#','Mİ','FA','FA#','SOL','SOL#','LA','LA#','Sİ'];
+function ensureAudio(){
+ if(audio)return;
+ audio=new (window.AudioContext||window.webkitAudioContext)();
+ master=audio.createGain();master.gain.value=volume;master.connect(audio.destination);
 }
-
-if(audio.state==="suspended")audio.resume();
-
+function freq(si,fret){return strings[si].base*tuningMul[tuning][si]*Math.pow(2,fret/12)}
+function playNote(si,fret=0,dir='down',silent=false){
+ ensureAudio(); if(audio.state==='suspended')audio.resume();
+ const f=freq(si,fret),now=audio.currentTime;
+ const osc=audio.createOscillator(),harm=audio.createOscillator(),gain=audio.createGain(),g2=audio.createGain();
+ osc.type='triangle';harm.type='sine';osc.frequency.value=f;harm.frequency.value=f*2;
+ gain.gain.setValueAtTime(0.0001,now);gain.gain.exponentialRampToValueAtTime(.85,now+.012);gain.gain.exponentialRampToValueAtTime(.0001,now+.72);
+ g2.gain.value=.12;
+ osc.connect(gain);harm.connect(g2);g2.connect(gain);gain.connect(master);osc.start(now);harm.start(now);osc.stop(now+.75);harm.stop(now+.75);
+ const name=fretNames[(strings[si].midi+fret)%12], label=name+(fret?(' '+fret):'');
+ current={si,fret,f,name,label,dir};
+ noteEl.textContent=name;metaEl.textContent=`Tel ${si+1} • Perde ${fret} • ${f.toFixed(1)} Hz`;
+ statusEl.textContent=dir==='up'?'↑ Yukarı mızrap':'↓ Aşağı mızrap';
+ addHistory(label);
+ flash(si,fret,dir);
+ if(vibrate&&navigator.vibrate)navigator.vibrate(8);
+ if(isRecording)recording.push({si,fret,dir,t:performance.now()});
 }
-
-function getFrequency(string,fret){
-
-return tunings[tuning][string]*
-Math.pow(2,fret/12);
-
+function addHistory(label){history.unshift(label);history=history.slice(0,24);count.textContent=history.length+' nota';historyEl.innerHTML=history.length?history.map(x=>`<span class="chip">${x}</span>`).join(''):'<span class="tip">Henüz nota çalınmadı.</span>'}
+function flash(si,fret,dir){draw(si,fret,true,dir);setTimeout(()=>draw(),130)}
+function geom(){
+ const W=canvas.width,H=canvas.height;
+ return {W,H,left:55,right:W-58,top:100,bottom:H-58,rows:7};
 }
-
-function getNoteName(freq){
-
-let midi=Math.round(69+12*Math.log2(freq/440));
-let index=((midi%12)+12)%12;
-
-return noteNames[index];
-
+function draw(hitSi=-1,hitFret=-1,flashOn=false,dir='down'){
+ const {W,H,left,right,top,bottom}=geom();ctx.clearRect(0,0,W,H);
+ const bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#080808');bg.addColorStop(.48,'#21130a');bg.addColorStop(1,'#0b0b0b');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+ // body
+ const body=ctx.createRadialGradient(W*.52,H*.55,30,W*.55,H*.55,W*.6);body.addColorStop(0,'#e29a45');body.addColorStop(.45,'#9b511a');body.addColorStop(1,'#33190a');
+ ctx.fillStyle=body;ctx.beginPath();ctx.ellipse(W*.57,H*.57,W*.43,H*.43,0,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#d58a3a66';ctx.lineWidth=3;ctx.stroke();
+ // sound hole
+ ctx.fillStyle='#090909';ctx.beginPath();ctx.arc(W*.73,H*.55,48,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#e5a04c';ctx.lineWidth=13;ctx.stroke();
+ // neck
+ ctx.fillStyle='#6a3211';ctx.fillRect(0,top-35,W*.72,bottom-top+70);
+ const n=neck==='short'?12:19;
+ const usable=right-left, step=usable/n;
+ // frets
+ ctx.strokeStyle='#d8d0c4';ctx.lineWidth=3;
+ for(let i=0;i<=n;i++){let x=left+i*step;ctx.beginPath();ctx.moveTo(x,top-35);ctx.lineTo(x,bottom+35);ctx.stroke();ctx.fillStyle='#bbb';ctx.font='16px system-ui';ctx.textAlign='center';ctx.fillText(i,x,bottom+28)}
+ // strings
+ for(let s=0;s<7;s++){let y=top+s*((bottom-top)/6);ctx.strokeStyle=s===hitSi&&flashOn?'#ffd36d':'#f1f1f1';ctx.lineWidth=(s===hitSi&&flashOn)?6:3;ctx.shadowBlur=(s===hitSi&&flashOn)?18:4;ctx.shadowColor='#fff';ctx.beginPath();ctx.moveTo(18,y);ctx.lineTo(W-18,y);ctx.stroke();ctx.shadowBlur=0;
+  ctx.fillStyle='#fff';ctx.font='20px system-ui';ctx.textAlign='left';ctx.fillText(strings[s].label,20,y-10);
+ }
+ // fret marker
+ if(hitSi>=0&&hitFret>=0){let y=top+hitSi*((bottom-top)/6);let x=left+(Math.min(hitFret,n-.1)+.5)*step;ctx.fillStyle=dir==='up'?'#75c9ff':'#ffc15c';ctx.shadowBlur=20;ctx.shadowColor=ctx.fillStyle;ctx.beginPath();ctx.arc(x,y,24,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#191919';ctx.font='bold 16px system-ui';ctx.textAlign='center';ctx.fillText(hitFret,x,y+6)}
+ ctx.fillStyle='#eee';ctx.font='bold 13px system-ui';ctx.textAlign='left';ctx.fillText(neck==='short'?'KISA SAP':'UZUN SAP',18,28);
+ ctx.fillStyle='#aaa';ctx.font='12px system-ui';ctx.fillText(tuning==='baglama'?'BAĞLAMA DÜZENİ':tuning==='bozuk'?'BOZUK DÜZEN':'KARA DÜZEN',18,48);
 }
-
-function playNote(string,fret){
-
-initAudio();
-
-lastString=string;
-lastFret=fret;
-
-const freq=getFrequency(string,fret);
-const now=audio.currentTime;
-
-const osc=audio.createOscillator();
-const gain=audio.createGain();
-
-osc.type="triangle";
-osc.frequency.setValueAtTime(freq,now);
-
-gain.gain.setValueAtTime(.0001,now);
-gain.gain.exponentialRampToValueAtTime(.62,now+.008);
-gain.gain.exponentialRampToValueAtTime(.20,now+.18);
-gain.gain.exponentialRampToValueAtTime(.0001,now+2);
-
-osc.connect(gain);
-gain.connect(master);
-
-osc.start(now);
-osc.stop(now+2.1);
-
-const harmonic=audio.createOscillator();
-const hg=audio.createGain();
-
-harmonic.type="sine";
-harmonic.frequency.value=freq*2;
-
-hg.gain.setValueAtTime(.0001,now);
-hg.gain.exponentialRampToValueAtTime(.12,now+.01);
-hg.gain.exponentialRampToValueAtTime(.0001,now+.8);
-
-harmonic.connect(hg);
-hg.connect(master);
-
-harmonic.start(now);
-harmonic.stop(now+.9);
-
-history.push({
-string:string,
-fret:fret,
-frequency:freq
-});
-
-if(recording){
-
-recordingData.push({
-time:Date.now()-recordStart,
-string:string,
-fret:fret
-});
-
+function pointer(e){
+ e.preventDefault();const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*canvas.width/r.width,y=(e.clientY-r.top)*canvas.height/r.height;
+ const {left,right,top,bottom}=geom();let si=Math.round((y-top)/((bottom-top)/6));si=Math.max(0,Math.min(6,si));
+ if(y<top-45||y>bottom+45||x<0||x>canvas.width)return;
+ const n=neck==='short'?12:19;let fret=x<left?0:Math.max(0,Math.min(n-1,Math.floor((x-left)/((right-left)/n))));
+ playNote(si,fret,'down');
 }
-
-showNote(string,fret,freq);
-
-if(vibration&&navigator.vibrate)
-navigator.vibrate(12);
-
-}
-
-function showNote(string,fret,freq){
-
-document.getElementById("note").textContent=
-getNoteName(freq);
-
-document.getElementById("info").textContent=
-"Tel "+(string+1)+
-" • Perde "+fret+
-" • "+freq.toFixed(1)+" Hz";
-
-document.querySelectorAll(".string")
-.forEach(x=>x.classList.remove("hit"));
-
-const current=document.querySelector(
-'.string[data-string="'+string+'"]'
-);
-
-if(current){
-
-current.classList.add("hit");
-
-setTimeout(()=>{
-current.classList.remove("hit");
-},130);
-
-}
-
-showFinger(string,fret);
-
-}
-
-function showFinger(string,fret){
-
-const instrument=document.getElementById("instrument");
-const finger=document.getElementById("finger");
-const frets=document.getElementById("frets");
-
-const rect=frets.getBoundingClientRect();
-const instRect=instrument.getBoundingClientRect();
-
-const count=sap==="kisa"?12:19;
-
-const x=rect.left+
-((fret+.5)/count)*rect.width;
-
-const stringRect=document.querySelector(
-'.string[data-string="'+string+'"]'
-).getBoundingClientRect();
-
-const y=stringRect.top+
-stringRect.height/2;
-
-finger.style.left=(x-instRect.left)+"px";
-finger.style.top=(y-instRect.top)+"px";
-finger.style.display="block";
-
-}
-
-function createFrets(){
-
-const container=document.getElementById("frets");
-container.innerHTML="";
-
-const count=sap==="kisa"?12:19;
-
-for(let i=0;i<count;i++){
-
-const fret=document.createElement("div");
-fret.className="fret";
-
-const number=document.createElement("div");
-number.className="fret-number";
-number.textContent=i;
-
-fret.appendChild(number);
-
-fret.addEventListener("pointerdown",function(e){
-
-e.preventDefault();
-
-const rect=container.getBoundingClientRect();
-
-const x=e.clientX-rect.left;
-
-let fretIndex=Math.floor(
-(x/rect.width)*count
-);
-
-fretIndex=Math.max(0,
-Math.min(count-1,fretIndex));
-
-const stringRect=document.querySelector(
-".strings"
-).getBoundingClientRect();
-
-const y=e.clientY-stringRect.top;
-
-let string=Math.floor(
-(y/stringRect.height)*7
-);
-
-string=Math.max(0,Math.min(6,string));
-
-document.querySelectorAll(".fret")
-.forEach(f=>f.classList.remove("active"));
-
-fret.classList.add("active");
-
-playNote(string,fretIndex);
-
-});
-
-container.appendChild(fret);
-
-}
-
-}
-
-function startRhythm(speed){
-
-stopRhythm();
-initAudio();
-
-rhythmTimer=setInterval(()=>{
-
-playNote(lastString,lastFret);
-
-setTimeout(()=>{
-playNote(Math.max(0,lastString-2),0);
-},160);
-
-},speed);
-
-document.getElementById("info").textContent=
-"Ritim açık";
-
-}
-
-function stopRhythm(){
-
-if(rhythmTimer){
-clearInterval(rhythmTimer);
-rhythmTimer=null;
-}
-
-}
-
-document.getElementById("soundBtn").onclick=()=>{
-
-initAudio();
-
-document.getElementById("soundBtn").textContent=
-"🔊 Ses Açık";
-
-};
-
-document.getElementById("volume").oninput=e=>{
-
-volume=Number(e.target.value)/100;
-
-if(master)master.gain.value=volume;
-
-};
-
-document.getElementById("vibration").onclick=function(){
-
-vibration=!vibration;
-this.textContent=vibration?"Açık":"Kapalı";
-
-};
-
-document.getElementById("sap").onchange=e=>{
-
-sap=e.target.value;
-createFrets();
-
-};
-
-document.getElementById("duzen").onchange=e=>{
-
-tuning=e.target.value;
-
-document.getElementById("info").textContent=
-"Akort: "+e.target.options[e.target.selectedIndex].text;
-
-};
-
-document.getElementById("down").onclick=()=>{
-
-playNote(lastString,lastFret);
-
-};
-
-document.getElementById("up").onclick=()=>{
-
-playNote(lastString,lastFret);
-
-};
-
-document.getElementById("record").onclick=function(){
-
-if(!recording){
-
-recording=true;
-recordingData=[];
-recordStart=Date.now();
-
-this.textContent="⏹ Kaydı Durdur";
-this.classList.add("recording");
-
-document.getElementById("info").textContent=
-"Kayıt yapılıyor...";
-
-}else{
-
-recording=false;
-
-this.textContent="🔴 Kayıt";
-this.classList.remove("recording");
-
-document.getElementById("info").textContent=
-"Kayıt tamamlandı • "+
-recordingData.length+" nota";
-
-}
-
-};
-
-document.getElementById("undo").onclick=()=>{
-
-if(history.length===0){
-
-document.getElementById("info").textContent=
-"Silinecek nota yok.";
-
-return;
-
-}
-
-history.pop();
-
-document.getElementById("info").textContent=
-"Son nota silindi.";
-
-};
-
-document.getElementById("slow").onclick=()=>{
-startRhythm(700);
-};
-
-document.getElementById("medium").onclick=()=>{
-startRhythm(500);
-};
-
-document.getElementById("fast").onclick=()=>{
-startRhythm(320);
-};
-
-document.getElementById("stop").onclick=()=>{
-
-stopRhythm();
-
-document.getElementById("info").textContent=
-"Ritim durduruldu.";
-
-};
-
-document.querySelectorAll(".string")
-.forEach(string=>{
-
-string.addEventListener("pointerdown",e=>{
-
-e.preventDefault();
-
-playNote(
-Number(string.dataset.string),
-0
-);
-
-});
-
-});
-
-createFrets();
-
+canvas.addEventListener('pointerdown',pointer,{passive:false});
+function startRhythm(speed){stopRhythm();const ms=speed==='slow'?650:speed==='mid'?400:220;statusEl.textContent='Ritim çalışıyor';let i=0;rhythmTimer=setInterval(()=>{playNote(i%7,0,i%2?'up':'down');i++},ms)}
+function stopRhythm(){if(rhythmTimer){clearInterval(rhythmTimer);rhythmTimer=null}statusEl.textContent='Hazır'}
+document.getElementById('down').onclick=()=>current&&playNote(current.si,current.fret,'down');
+document.getElementById('up').onclick=()=>current&&playNote(current.si,current.fret,'up');
+document.getElementById('undo').onclick=()=>{history.shift();count.textContent=history.length+' nota';historyEl.innerHTML=history.length?history.map(x=>`<span class="chip">${x}</span>`).join(''):'<span class="tip">Henüz nota çalınmadı.</span>';toast('Son nota geçmişten silindi')};
+document.getElementById('record').onclick=()=>{isRecording=!isRecording;if(isRecording){recording=[];document.getElementById('record').textContent='⏹ Kaydı Bitir';statusEl.textContent='Kayıt yapılıyor'}else{document.getElementById('record').textContent='🔴 Kayıt';statusEl.textContent=recording.length?'Kayıt hazır':'Hazır'}};
+document.getElementById('playRec').onclick=async()=>{if(!recording.length){toast('Önce kayıt yap');return}let base=recording[0].t;for(const e of recording){await new Promise(r=>setTimeout(r,Math.max(0,e.t-base)));playNote(e.si,e.fret,e.dir,true);base=e.t}toast('Kayıt çalındı')};
+document.getElementById('stopRhythm').onclick=stopRhythm;
+document.querySelectorAll('[data-rhythm]').forEach(b=>b.onclick=()=>startRhythm(b.dataset.rhythm));
+document.getElementById('neck').onchange=e=>{neck=e.target.value;draw();};
+document.getElementById('tuning').onchange=e=>{tuning=e.target.value;draw();};
+document.getElementById('volume').oninput=e=>{volume=e.target.value/100;document.getElementById('volText').textContent=e.target.value+'%';if(master)master.gain.value=volume};
+document.getElementById('vibrate').onchange=e=>vibrate=e.target.checked;
+document.getElementById('fullBtn').onclick=()=>{if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})};
+document.getElementById('resetBtn').onclick=()=>{stopRhythm();history=[];recording=[];isRecording=false;document.getElementById('record').textContent='🔴 Kayıt';noteEl.textContent='—';metaEl.textContent='Bir tele veya perdeye dokun';count.textContent='0 nota';historyEl.innerHTML='<span class="tip">Henüz nota çalınmadı.</span>';draw();toast('Ayarlar sıfırlandı')};
+function toast(t){toastEl.textContent=t;toastEl.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>toastEl.classList.remove('show'),1600)}
+window.addEventListener('resize',draw);
+draw();
 </script>
-
 </body>
 </html>
