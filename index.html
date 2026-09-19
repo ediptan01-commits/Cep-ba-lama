@@ -2,327 +2,307 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Cep Bağlama</title>
 
 <style>
 *{
-box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
 }
 
 body{
-margin:0;
-background:#0d0d0d;
-color:#fff;
-font-family:Arial,sans-serif;
-overflow-x:hidden;
-touch-action:manipulation;
+ margin:0;
+ background:#0b0b0b;
+ color:white;
+ font-family:Arial,sans-serif;
+ overflow-x:hidden;
+ touch-action:none;
 }
 
 header{
-height:70px;
-padding:10px 18px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-background:linear-gradient(135deg,#25140a,#613514);
-border-bottom:1px solid #9a5d25;
+ height:68px;
+ padding:9px 16px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ background:linear-gradient(135deg,#241207,#704018);
+ border-bottom:1px solid #a96629;
 }
 
 .logo{
-font-size:24px;
-font-weight:bold;
+ font-size:23px;
+ font-weight:bold;
 }
 
 .subtitle{
-color:#d8b58b;
-font-size:12px;
-margin-top:3px;
+ color:#d8b48a;
+ font-size:11px;
+ margin-top:3px;
 }
 
 button,select{
-border:0;
-border-radius:12px;
-background:#704017;
-color:white;
-padding:11px 15px;
-font-size:14px;
+ border:0;
+ border-radius:12px;
+ background:#743f16;
+ color:white;
+ padding:10px 13px;
+ font-size:14px;
 }
 
 button:active{
-transform:scale(.95);
+ transform:scale(.95);
 }
 
 .controls{
-display:flex;
-gap:8px;
-padding:10px;
-background:#181818;
-overflow-x:auto;
+ display:flex;
+ gap:8px;
+ padding:9px;
+ background:#181818;
+ overflow-x:auto;
 }
 
 .control{
-min-width:115px;
-padding:9px;
-background:#242424;
-border:1px solid #393939;
-border-radius:12px;
+ min-width:115px;
+ padding:8px;
+ background:#242424;
+ border:1px solid #3b3b3b;
+ border-radius:12px;
 }
 
 .control-title{
-font-size:11px;
-color:#aaa;
-margin-bottom:6px;
+ color:#aaa;
+ font-size:11px;
+ margin-bottom:5px;
 }
 
 select{
-width:100%;
-background:#353535;
-padding:7px;
+ width:100%;
+ background:#363636;
+ padding:7px;
 }
 
 input[type=range]{
-width:100%;
+ width:100%;
 }
 
 .instrument{
-position:relative;
-width:96%;
-max-width:1150px;
-height:500px;
-margin:20px auto;
-background:
-radial-gradient(circle at 78% 50%,
-#15100b 0 5%,
-#d38a3d 6% 10%,
-transparent 11%),
-linear-gradient(90deg,#40200c,#8d4c1c,#b56a2b,#713914,#3c1c0a);
-border-radius:90px;
-box-shadow:
-0 18px 40px #000,
-inset 0 0 40px #241004;
-overflow:hidden;
-}
-
-.body{
-position:absolute;
-right:4%;
-top:8%;
-width:34%;
-height:84%;
-border-radius:50%;
-background:
-radial-gradient(circle at center,
-#0a0806 0 10%,
-#d0873b 11% 17%,
-#934c1b 18% 100%);
-box-shadow:
-inset 0 0 40px #301507,
-0 10px 25px #000;
+ position:relative;
+ width:96%;
+ max-width:1150px;
+ height:510px;
+ margin:18px auto;
+ overflow:hidden;
+ border-radius:90px;
+ background:
+ radial-gradient(circle at 78% 50%,
+ #080706 0 5%,
+ #d48b3c 6% 10%,
+ transparent 11%),
+ linear-gradient(90deg,#3b1c09,#7e4218,#ae6729,#713813,#351806);
+ box-shadow:
+ 0 18px 40px #000,
+ inset 0 0 45px #251003;
 }
 
 .neck{
-position:absolute;
-left:2%;
-top:18%;
-width:72%;
-height:64%;
-border-radius:25px 80px 80px 25px;
-background:
-linear-gradient(#9c5d2c,#5b3014,#9a5928);
-box-shadow:inset 0 0 20px #2a1205;
+ position:absolute;
+ left:2%;
+ top:16%;
+ width:73%;
+ height:68%;
+ border-radius:25px 80px 80px 25px;
+ background:linear-gradient(
+ #a3612d,
+ #603316,
+ #955325
+ );
+ box-shadow:inset 0 0 20px #251004;
 }
 
-.strings{
-position:absolute;
-left:4%;
-top:19%;
-width:91%;
-height:62%;
-z-index:10;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-}
-
-.string{
-height:28px;
-position:relative;
-cursor:pointer;
-}
-
-.string-line{
-position:absolute;
-left:0;
-right:0;
-top:13px;
-height:2px;
-background:#eee;
-box-shadow:0 0 5px #fff;
-transition:.08s;
-}
-
-.string.hit .string-line{
-height:5px;
-background:#fff8d5;
-box-shadow:0 0 15px #fff;
-}
-
-.string-name{
-position:absolute;
-left:3px;
-top:0;
-font-size:11px;
-color:#fff;
-text-shadow:0 1px 3px #000;
+.body{
+ position:absolute;
+ right:4%;
+ top:7%;
+ width:35%;
+ height:86%;
+ border-radius:50%;
+ background:
+ radial-gradient(circle at center,
+ #090806 0 9%,
+ #d68c3d 10% 16%,
+ #914a1b 17% 100%);
+ box-shadow:
+ inset 0 0 40px #2b1305,
+ 0 10px 25px #000;
 }
 
 .frets{
-position:absolute;
-left:7%;
-top:18%;
-width:66%;
-height:64%;
-z-index:6;
-pointer-events:auto;
-display:flex;
+ position:absolute;
+ left:6%;
+ top:16%;
+ width:67%;
+ height:68%;
+ z-index:8;
+ display:flex;
 }
 
 .fret{
-height:100%;
-flex:1;
-border-right:3px solid rgba(245,210,165,.7);
-position:relative;
+ position:relative;
+ height:100%;
+ flex:1;
+ border-right:3px solid rgba(242,211,174,.7);
 }
 
 .fret:first-child{
-border-left:4px solid #e4b276;
+ border-left:4px solid #e3ad70;
 }
 
-.fret-label{
-position:absolute;
-bottom:5px;
-left:50%;
-transform:translateX(-50%);
-font-size:9px;
-color:rgba(255,255,255,.55);
+.fret.active{
+ background:rgba(255,190,80,.20);
+ box-shadow:inset 0 0 18px rgba(255,190,80,.5);
 }
 
-.fret-touch{
-position:absolute;
-inset:0;
+.fret-number{
+ position:absolute;
+ bottom:3px;
+ width:100%;
+ text-align:center;
+ font-size:9px;
+ color:#ddd;
+ opacity:.75;
+ pointer-events:none;
 }
 
-.fret-touch:active{
-background:rgba(255,210,120,.15);
+.strings{
+ position:absolute;
+ left:4%;
+ top:17%;
+ width:91%;
+ height:66%;
+ z-index:12;
+ display:flex;
+ flex-direction:column;
+ justify-content:space-between;
+ pointer-events:none;
 }
 
-.note-display{
-width:96%;
-max-width:1150px;
-margin:10px auto;
-background:#1b1b1b;
-border:1px solid #353535;
-border-radius:18px;
-padding:14px;
-text-align:center;
+.string{
+ position:relative;
+ height:28px;
+ pointer-events:auto;
+}
+
+.string-line{
+ position:absolute;
+ left:0;
+ right:0;
+ top:13px;
+ height:2px;
+ background:#eee;
+ box-shadow:0 0 5px white;
+ transition:.08s;
+}
+
+.string.hit .string-line{
+ height:6px;
+ background:#fff5c7;
+ box-shadow:0 0 18px white;
+}
+
+.string-name{
+ position:absolute;
+ left:3px;
+ top:-1px;
+ font-size:11px;
+ color:white;
+ text-shadow:0 2px 3px black;
+}
+
+.finger{
+ position:absolute;
+ width:34px;
+ height:34px;
+ border-radius:50%;
+ background:rgba(255,190,80,.9);
+ border:3px solid white;
+ box-shadow:0 0 20px #ffb34d;
+ z-index:30;
+ transform:translate(-50%,-50%);
+ pointer-events:none;
+ display:none;
+}
+
+.note-panel{
+ width:96%;
+ max-width:1150px;
+ margin:10px auto;
+ padding:14px;
+ text-align:center;
+ border-radius:18px;
+ background:#1b1b1b;
+ border:1px solid #383838;
 }
 
 .note{
-font-size:38px;
-font-weight:bold;
-color:#e5aa5c;
+ font-size:42px;
+ font-weight:bold;
+ color:#e4a655;
 }
 
-.note-info{
-color:#aaa;
-margin-top:4px;
+.info{
+ color:#aaa;
+ margin-top:5px;
 }
 
-.mizrap{
-display:flex;
-justify-content:center;
-gap:10px;
-margin-top:12px;
-}
-
-.active{
-background:#a6601e!important;
+.actions{
+ display:flex;
+ justify-content:center;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:12px;
 }
 
 .bottom{
-width:96%;
-max-width:1150px;
-margin:12px auto 30px;
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-justify-content:center;
-}
-
-.panel{
-background:#1c1c1c;
-border:1px solid #353535;
-border-radius:15px;
-padding:12px;
+ width:96%;
+ max-width:1150px;
+ margin:10px auto 25px;
+ display:flex;
+ justify-content:center;
+ gap:9px;
+ flex-wrap:wrap;
 }
 
 .recording{
-background:#9e2424!important;
-animation:pulse 1s infinite;
-}
-
-@keyframes pulse{
-50%{opacity:.55}
+ background:#a52323!important;
 }
 
 @media(max-width:700px){
 
-.instrument{
-height:420px;
-border-radius:65px;
-}
+ .instrument{
+  height:430px;
+  border-radius:65px;
+ }
 
-.logo{
-font-size:20px;
-}
+ .logo{
+  font-size:20px;
+ }
 
-.neck{
-top:17%;
-height:66%;
-}
-
-.body{
-top:9%;
-height:82%;
-}
-
-.strings{
-top:18%;
-height:64%;
-}
-
-.frets{
-top:17%;
-height:66%;
-}
-
+ .note{
+  font-size:38px;
+ }
 }
 
 @media(orientation:landscape) and (max-height:600px){
 
-header{
-height:52px;
-}
+ header{
+  height:52px;
+ }
 
-.instrument{
-height:calc(100vh - 130px);
-margin:8px auto;
-}
-
+ .instrument{
+  height:calc(100vh - 125px);
+  margin:7px auto;
+ }
 }
 </style>
 </head>
@@ -333,63 +313,44 @@ margin:8px auto;
 
 <div>
 <div class="logo">🎸 Cep Bağlama</div>
-<div class="subtitle">Dijital bağlama • 2. sürüm</div>
+<div class="subtitle">Dijital bağlama • 3. sürüm</div>
 </div>
 
-<button id="soundButton">🔊 Sesi Aç</button>
+<button id="soundBtn">🔊 Sesi Aç</button>
 
 </header>
 
 <div class="controls">
 
 <div class="control">
-<div class="control-title">Bağlama</div>
-
-<select id="type">
+<div class="control-title">Sap</div>
+<select id="sap">
 <option value="kisa">Kısa Sap</option>
 <option value="uzun">Uzun Sap</option>
 </select>
-
 </div>
 
 <div class="control">
 <div class="control-title">Düzen</div>
-
-<select id="tuning">
+<select id="duzen">
 <option value="baglama">Bağlama Düzeni</option>
 <option value="bozuk">Bozuk Düzen</option>
 <option value="kara">Kara Düzen</option>
 </select>
-
 </div>
 
 <div class="control">
-
 <div class="control-title">Ses</div>
+<input id="volume" type="range" min="0" max="100" value="75">
+</div>
 
-<input
-id="volume"
-type="range"
-min="0"
-max="100"
-value="75">
+<button id="vibration">Titreşim Açık</button>
 
 </div>
 
-<div class="control">
-
-<div class="control-title">Titreşim</div>
-
-<button id="vibration">Açık</button>
-
-</div>
-
-</div>
-
-<div class="instrument">
+<div class="instrument" id="instrument">
 
 <div class="neck"></div>
-
 <div class="body"></div>
 
 <div class="frets" id="frets"></div>
@@ -433,21 +394,23 @@ value="75">
 
 </div>
 
+<div class="finger" id="finger"></div>
+
 </div>
 
-<div class="note-display">
+<div class="note-panel">
 
 <div class="note" id="note">—</div>
 
-<div class="note-info" id="noteInfo">
-Bir tele veya perdeye dokun.
+<div class="info" id="info">
+Tele ve perdeye dokun.
 </div>
 
-<div class="mizrap">
+<div class="actions">
 
-<button data-mizrap="down">↓ Aşağı Mızrap</button>
-
-<button data-mizrap="up">↑ Yukarı Mızrap</button>
+<button id="down">↓ Aşağı Mızrap</button>
+<button id="up">↑ Yukarı Mızrap</button>
+<button id="record">🔴 Kayıt</button>
 
 </div>
 
@@ -455,27 +418,10 @@ Bir tele veya perdeye dokun.
 
 <div class="bottom">
 
-<div class="panel">
-
-<button id="record">🔴 Kayıt</button>
-
-</div>
-
-<div class="panel">
-
-<button id="undo">↩ Son Notayı Sil</button>
-
-</div>
-
-<div class="panel">
-
-<button data-speed="700">🐢 Yavaş</button>
-
-<button data-speed="500">▶ Orta</button>
-
-<button data-speed="320">🔥 Hızlı</button>
-
-</div>
+<button id="slow">🐢 Yavaş</button>
+<button id="medium">▶ Orta</button>
+<button id="fast">🔥 Hızlı</button>
+<button id="stop">⏹ Ritim Durdur</button>
 
 </div>
 
@@ -487,19 +433,17 @@ let master=null;
 let volume=.75;
 let vibration=true;
 
-let currentTuning="baglama";
-let currentType="kisa";
+let tuning="baglama";
+let sap="kisa";
 
-let selectedString=0;
-let selectedFret=0;
+let lastString=0;
+let lastFret=0;
 
-let history=[];
+let rhythmTimer=null;
 
 let recording=false;
 let recordStart=0;
-let recordedNotes=[];
-
-let rhythmTimer=null;
+let recordingData=[];
 
 const tunings={
 
@@ -536,9 +480,18 @@ kara:[
 };
 
 const noteNames=[
-"DO","DO#","RE","RE#",
-"MI","FA","FA#","SOL",
-"SOL#","LA","LA#","Sİ"
+"DO",
+"DO#",
+"RE",
+"RE#",
+"MI",
+"FA",
+"FA#",
+"SOL",
+"SOL#",
+"LA",
+"LA#",
+"Sİ"
 ];
 
 function initAudio(){
@@ -558,41 +511,58 @@ master.connect(audio.destination);
 
 }
 
-if(audio.state==="suspended")
+if(audio.state==="suspended"){
 audio.resume();
+}
 
 }
 
-function frequencyFor(string,fret){
+function getFrequency(string,fret){
 
-let base=
-tunings[currentTuning][string];
+const base=tunings[tuning][string];
 
-return base*
-Math.pow(2,fret/12);
+return base*Math.pow(2,fret/12);
 
 }
 
-function playNote(string,fret=0){
+function getNoteName(freq){
+
+const midi=Math.round(
+69+12*Math.log2(freq/440)
+);
+
+let n=midi%12;
+
+if(n<0)n+=12;
+
+return noteNames[n];
+
+}
+
+function playNote(string,fret){
 
 initAudio();
 
-selectedString=string;
-selectedFret=fret;
+lastString=string;
+lastFret=fret;
 
-let frequency=
-frequencyFor(string,fret);
+const freq=getFrequency(
+string,
+fret
+);
 
-let now=audio.currentTime;
+const now=audio.currentTime;
 
-let osc=audio.createOscillator();
+const oscillator=
+audio.createOscillator();
 
-let gain=audio.createGain();
+const gain=
+audio.createGain();
 
-osc.type="triangle";
+oscillator.type="triangle";
 
-osc.frequency.setValueAtTime(
-frequency,
+oscillator.frequency.setValueAtTime(
+freq,
 now
 );
 
@@ -602,13 +572,13 @@ now
 );
 
 gain.gain.exponentialRampToValueAtTime(
-.65,
+.62,
 now+.008
 );
 
 gain.gain.exponentialRampToValueAtTime(
-.18,
-now+.2
+.20,
+now+.18
 );
 
 gain.gain.exponentialRampToValueAtTime(
@@ -616,37 +586,40 @@ gain.gain.exponentialRampToValueAtTime(
 now+2
 );
 
-osc.connect(gain);
+oscillator.connect(gain);
 gain.connect(master);
 
-osc.start(now);
-osc.stop(now+2.1);
+oscillator.start(now);
+oscillator.stop(now+2.1);
 
-let harmonic=
+const harmonic=
 audio.createOscillator();
 
-let hg=
+const harmonicGain=
 audio.createGain();
 
 harmonic.type="sine";
 
 harmonic.frequency.value=
-frequency*2;
+freq*2;
 
-hg.gain.setValueAtTime(.0001,now);
+harmonicGain.gain.setValueAtTime(
+.0001,
+now
+);
 
-hg.gain.exponentialRampToValueAtTime(
+harmonicGain.gain.exponentialRampToValueAtTime(
 .12,
 now+.01
 );
 
-hg.gain.exponentialRampToValueAtTime(
+harmonicGain.gain.exponentialRampToValueAtTime(
 .0001,
 now+.8
 );
 
-harmonic.connect(hg);
-hg.connect(master);
+harmonic.connect(harmonicGain);
+harmonicGain.connect(master);
 
 harmonic.start(now);
 harmonic.stop(now+.9);
@@ -654,118 +627,163 @@ harmonic.stop(now+.9);
 showNote(
 string,
 fret,
-frequency
+freq
 );
-
-history.push({
-string,
-fret,
-frequency
-});
 
 if(recording){
 
-recordedNotes.push({
+recordingData.push({
 time:Date.now()-recordStart,
-string,
-fret
+string:string,
+fret:fret
 });
 
 }
 
-if(vibration && navigator.vibrate)
+if(vibration &&
+navigator.vibrate){
+
 navigator.vibrate(12);
 
 }
 
-function showNote(string,fret,frequency){
+}
 
-let midi=
-69+
-12*Math.log2(frequency/440);
-
-let index=
-Math.round(midi)%12;
-
-if(index<0)
-index+=12;
-
-let octave=
-Math.floor(Math.round(midi)/12)-1;
+function showNote(
+string,
+fret,
+freq
+){
 
 document.getElementById(
 "note"
 ).textContent=
-noteNames[index];
+getNoteName(freq);
 
 document.getElementById(
-"noteInfo"
+"info"
 ).textContent=
 "Tel "+(string+1)+
 " • Perde "+fret+
-" • "+frequency.toFixed(1)+" Hz";
+" • "+freq.toFixed(1)+" Hz";
 
-let element=
+document
+.querySelectorAll(".string")
+.forEach(x=>
+x.classList.remove("hit")
+);
+
+const current=
 document.querySelector(
 '.string[data-string="'+
 string+'"]'
 );
 
-element.classList.add("hit");
+if(current){
+
+current.classList.add("hit");
 
 setTimeout(()=>{
-element.classList.remove("hit");
-},120);
+current.classList.remove("hit");
+},130);
 
 }
 
+showFinger(
+string,
+fret
+);
+
+}
+
+function showFinger(
+string,
+fret
+){
+
+const instrument=
+document.getElementById(
+"instrument"
+);
+
+const finger=
+document.getElementById(
+"finger"
+);
+
+const frets=
+document.getElementById(
+"frets"
+);
+
+const rect=
+frets.getBoundingClientRect();
+
+const instRect=
+instrument.getBoundingClientRect();
+
+const count=
+sap==="kisa"
+?12
+:19;
+
+const x=
+rect.left+
+((fret+.5)/count)*
+rect.width;
+
+const stringRect=
 document
-.querySelectorAll(".string")
-.forEach(element=>{
+.querySelector(
+'.string[data-string="'+
+string+'"]'
+)
+.getBoundingClientRect();
 
-element.addEventListener(
-"pointerdown",
-e=>{
+const y=
+stringRect.top+
+stringRect.height/2;
 
-e.preventDefault();
+finger.style.left=
+(x-instRect.left)+"px";
 
-playNote(
-Number(element.dataset.string),
-0
-);
+finger.style.top=
+(y-instRect.top)+"px";
+
+finger.style.display="block";
 
 }
-);
-
-});
 
 function createFrets(){
 
-let container=
-document.getElementById("frets");
+const container=
+document.getElementById(
+"frets"
+);
 
 container.innerHTML="";
 
-let count=
-currentType==="kisa"
+const count=
+sap==="kisa"
 ?12
 :19;
 
 for(let i=0;i<count;i++){
 
-let fret=
+const fret=
 document.createElement("div");
 
 fret.className="fret";
 
-let label=
+const number=
 document.createElement("div");
 
-label.className="fret-label";
+number.className=
+"fret-number";
 
-label.textContent=i;
+number.textContent=i;
 
-fret.appendChild(label);
+fret.appendChild(number);
 
 fret.addEventListener(
 "pointerdown",
@@ -773,31 +791,53 @@ function(e){
 
 e.preventDefault();
 
-let rect=
-fret.getBoundingClientRect();
+const rect=
+container.getBoundingClientRect();
 
-let stringArea=
-document.querySelector(
-".strings"
-).getBoundingClientRect();
+const x=
+e.clientX-rect.left;
 
-let y=
-e.clientY-stringArea.top;
+let fretIndex=
+Math.floor(
+(x/rect.width)*count
+);
 
-let stringHeight=
-stringArea.height/7;
+if(fretIndex<0)
+fretIndex=0;
+
+if(fretIndex>=count)
+fretIndex=count-1;
+
+const stringRect=
+document
+.querySelector(".strings")
+.getBoundingClientRect();
+
+const y=
+e.clientY-stringRect.top;
 
 let string=
 Math.floor(
-y/stringHeight
+(y/stringRect.height)*7
 );
 
-if(string<0)string=0;
-if(string>6)string=6;
+if(string<0)
+string=0;
+
+if(string>6)
+string=6;
+
+document
+.querySelectorAll(".fret")
+.forEach(f=>
+f.classList.remove("active")
+);
+
+fret.classList.add("active");
 
 playNote(
 string,
-i
+fretIndex
 );
 
 }
@@ -809,123 +849,156 @@ container.appendChild(fret);
 
 }
 
-document.getElementById(
-"type"
-).addEventListener(
-"change",
-function(){
+function startRhythm(speed){
 
-currentType=this.value;
+stopRhythm();
 
-createFrets();
+initAudio();
 
-}
+rhythmTimer=
+setInterval(()=>{
+
+playNote(
+lastString,
+lastFret
 );
 
-document.getElementById(
-"tuning"
-).addEventListener(
-"change",
-function(){
+setTimeout(()=>{
 
-currentTuning=this.value;
+playNote(
+Math.max(0,lastString-2),
+0
+);
+
+},160);
+
+},speed);
 
 document.getElementById(
-"noteInfo"
+"info"
 ).textContent=
-"Akort değiştirildi.";
+"Ritim açık";
 
 }
-);
+
+function stopRhythm(){
+
+if(rhythmTimer){
+
+clearInterval(rhythmTimer);
+
+rhythmTimer=null;
+
+}
+
+}
+
+document.getElementById(
+"soundBtn"
+).onclick=()=>{
+
+initAudio();
+
+document.getElementById(
+"soundBtn"
+).textContent=
+"🔊 Ses Açık";
+
+};
 
 document.getElementById(
 "volume"
-).addEventListener(
-"input",
-function(){
+).oninput=e=>{
 
 volume=
-Number(this.value)/100;
+Number(e.target.value)/100;
 
 if(master)
 master.gain.value=volume;
 
-}
-);
-
-document.getElementById(
-"soundButton"
-).addEventListener(
-"click",
-function(){
-
-initAudio();
-
-this.textContent="🔊 Ses Açık";
-
-}
-);
+};
 
 document.getElementById(
 "vibration"
-).addEventListener(
-"click",
-function(){
+).onclick=function(){
 
 vibration=!vibration;
 
 this.textContent=
 vibration
-?"Açık"
-:"Kapalı";
+?"Titreşim Açık"
+:"Titreşim Kapalı";
 
-}
-);
+};
 
-document
-.querySelectorAll("[data-mizrap]")
-.forEach(button=>{
+document.getElementById(
+"sap"
+).onchange=e=>{
 
-button.addEventListener(
-"click",
-()=>{
+sap=e.target.value;
 
-initAudio();
+createFrets();
 
-if(selectedString===undefined)
-selectedString=0;
+};
+
+document.getElementById(
+"duzen"
+).onchange=e=>{
+
+tuning=e.target.value;
+
+document.getElementById(
+"info"
+).textContent=
+"Akort değiştirildi.";
+
+};
+
+document.getElementById(
+"down"
+).onclick=()=>{
 
 playNote(
-selectedString,
-selectedFret
+lastString,
+lastFret
 );
 
-}
+};
 
+document.getElementById(
+"up"
+).onclick=()=>{
+
+playNote(
+lastString,
+lastFret
 );
 
-});
+};
 
 document.getElementById(
 "record"
-).addEventListener(
-"click",
-function(){
+).onclick=function(){
 
 if(!recording){
 
 recording=true;
 
-recordedNotes=[];
+recordingData=[];
 
 recordStart=Date.now();
 
 this.textContent=
-"⏹️ Kaydı Durdur";
+"⏹ Kaydı Durdur";
 
 this.classList.add(
 "recording"
 );
+
+document.getElementById(
+"info"
+).textContent=
+"Kayıt yapılıyor...";
 
 }else{
 
@@ -938,74 +1011,62 @@ this.classList.remove(
 "recording"
 );
 
-let count=
-recordedNotes.length;
-
 document.getElementById(
-"noteInfo"
+"info"
 ).textContent=
 "Kayıt tamamlandı • "+
-count+" nota";
+recordingData.length+
+" nota";
 
 }
 
-}
-);
+};
 
 document.getElementById(
-"undo"
-).addEventListener(
-"click",
-function(){
-
-if(history.length===0)
-return;
-
-history.pop();
+"slow"
+).onclick=()=>{
+startRhythm(700);
+};
 
 document.getElementById(
-"noteInfo"
+"medium"
+).onclick=()=>{
+startRhythm(500);
+};
+
+document.getElementById(
+"fast"
+).onclick=()=>{
+startRhythm(320);
+};
+
+document.getElementById(
+"stop"
+).onclick=()=>{
+
+stopRhythm();
+
+document.getElementById(
+"info"
 ).textContent=
-"Son nota silindi.";
+"Ritim durduruldu.";
 
-}
-);
+};
 
 document
-.querySelectorAll("[data-speed]")
-.forEach(button=>{
+.querySelectorAll(".string")
+.forEach(string=>{
 
-button.addEventListener(
-"click",
-function(){
+string.addEventListener(
+"pointerdown",
+e=>{
 
-if(rhythmTimer){
+e.preventDefault();
 
-clearInterval(rhythmTimer);
-rhythmTimer=null;
-
-}
-
-let speed=
-Number(this.dataset.speed);
-
-initAudio();
-
-rhythmTimer=
-setInterval(()=>{
-
-playNote(4,0);
-
-setTimeout(()=>{
-playNote(2,0);
-},150);
-
-},speed);
-
-document.getElementById(
-"noteInfo"
-).textContent=
-"Ritim açık";
+playNote(
+Number(string.dataset.string),
+0
+);
 
 }
 );
