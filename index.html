@@ -110,13 +110,146 @@ const strings=[
 ];
 const tuningMul={baglama:[1,1,1,1,1,1,1],bozuk:[1,1,1,1,1,1,0.5],kara:[1,1,2,2,1,1,1]};
 const fretNames=['DO','DO#','RE','RE#','Mİ','FA','FA#','SOL','SOL#','LA','LA#','Sİ'];
+let sampleBuffer = null;
+let sampleLoading = null;
+
 function ensureAudio(){
- if(audio)return;
- audio=new (window.AudioContext||window.webkitAudioContext)();
- master=audio.createGain();master.gain.value=volume;master.connect(audio.destination);
+  if(audio) return;
+
+  audio = new (window.AudioContext || window.webkitAudioContext)();
+
+  master = audio.createGain();
+  master.gain.value = volume;
+  master.connect(audio.destination);
 }
-function freq(si,fret){return strings[si].base*tuningMul[tuning][si]*Math.pow(2,fret/12)}
-function playNote(si,fret=0,dir='down',silent=false){
+
+async function loadBaglamaSample(){
+  ensureAudio();
+
+  if(sampleBuffer) return sampleBuffer;
+
+  if(sampleLoading) return sampleLoading;
+
+  sampleLoading = fetch('baglama_e.mp3')
+    .then(response => {
+      if(!response.ok){
+        throw new Error('Bağlama sesi bulunamadı');
+      }
+      return response.arrayBuffer();
+    })
+    .then(data => audio.decodeAudioData(data))
+    .then(buffer => {
+      sampleBuffer = buffer;
+      return buffer;
+    });
+
+  return sampleLoading;
+}
+
+function freq(si,fret){
+  return strings[si].base *
+         tuningMul[tuning][si] *
+         Math.pow(2,fret/12);
+}
+
+async function playNote(si,fret=0,dir='down',silent=false){
+
+  ensureAudio();
+
+  if(audio.state === 'suspended'){
+    await audio.resume();
+  }
+
+  try{
+
+    const buffer = await loadBaglamaSample();
+
+    const targetFreq = freq(si,fret);
+
+    /*
+      Bağlama_E örneğini temel ses olarak kullanıyoruz.
+      Perdelere göre playbackRate değişerek nota yükseliyor/alçalıyor.
+    */
+    const sampleRootFreq = 164.81;
+
+    const source = audio.createBufferSource();
+    const gain = audio.createGain();
+
+    source.buffer = buffer;
+
+    source.playbackRate.value =
+      targetFreq / sampleRootFreq;
+
+    const now = audio.currentTime;
+
+    gain.gain.setValueAtTime(0.0001,now);
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.85,
+      now + 0.008
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001,
+      now + 1.6
+    );
+
+    source.connect(gain);
+    gain.connect(master);
+
+    source.start(now);
+
+    source.stop(now + 1.65);
+
+    const name =
+      fretNames[(strings[si].midi + fret) % 12];
+
+    current = {
+      si,
+      fret,
+      f:targetFreq,
+      name,
+      label:strings[si].label,
+      dir
+    };
+
+    noteEl.textContent = name;
+    metaEl.textContent =
+      `Tel: ${strings[si].label} • Perde: ${fret}`;
+
+    statusEl.textContent =
+      dir === 'up'
+        ? '↑ Yukarı mızrap'
+        : '↓ Aşağı mızrap';
+
+    addHistory(strings[si].label);
+
+    flash(si,fret,dir);
+
+    if(vibrate && navigator.vibrate){
+      navigator.vibrate(18);
+    }
+
+    if(isRecording){
+      recording.push({
+        si,
+        fret,
+        dir,
+        t:performance.now()
+      });
+    }
+
+  }catch(error){
+
+    console.error(
+      'Bağlama sesi yüklenemedi:',
+      error
+    );
+
+    statusEl.textContent =
+      'Bağlama sesi yüklenemedi';
+  }
+     }
  ensureAudio(); if(audio.state==='suspended')audio.resume();
  const f=freq(si,fret),now=audio.currentTime;
  const osc=audio.createOscillator(),harm=audio.createOscillator(),gain=audio.createGain(),g2=audio.createGain();
